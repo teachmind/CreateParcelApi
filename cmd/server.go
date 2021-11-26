@@ -29,3 +29,7 @@ var serverCmd = &cobra.Command{
 		return s.Run()
 	},
 }
+
+func init() {
+	rootCmd.AddCommand(serverCmd)
+}
