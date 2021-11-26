@@ -18,6 +18,10 @@ lint:
 	@echo "> running linter $(SOURCE_DIRS)/..."
 	@golangci-lint run -v --timeout 5m $(SOURCE_DIRS)/...
 
+build:
+	@echo "> building binary"
+	@go build -o $(APP_EXECUTABLE) -ldflags "-X main.commit=$(APP_COMMIT)"
+
 server: build
 	@echo "> running server command"
 	@${APP_EXECUTABLE} server
