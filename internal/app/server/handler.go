@@ -3,11 +3,8 @@ package server
 import (
 	"CreateParcelApi/internal/app/model"
 	"encoding/json"
-	"errors"
 	"github.com/rs/zerolog/log"
-	"google.golang.org/protobuf/types/known/timestamppb"
 	"net/http"
-	"time"
 )
 
 func (s *server) newParcel(w http.ResponseWriter, r *http.Request) {
@@ -37,22 +34,13 @@ func (s *server) newParcel(w http.ResponseWriter, r *http.Request) {
 		CreatedAt:          data.CreatedAt,
 		UpdatedAt:          data.UpdatedAt,
 	}
+
 	message, err := json.Marshal(&parcel)
 	if err != nil {
-		log.Error().Err(err).Msg("proto marshal failed")
+		log.Error().Err(err).Msg("json marshal failed")
 		ErrUnprocessableEntityResponse(w, "bad request", err)
 		return
 	}
 
-	if err != nil {
-		if errors.Is(err, model.ErrInvalid) {
-			ErrInvalidEntityResponse(w, "invalid parcel", err)
-			return
-		}
-		log.Error().Err(err).Msgf("[parcel] failed to create parcel Error: %v", err)
-		ErrInternalServerResponse(w, "failed to create parcel", err)
-		return
-	}
-
-	SuccessResponse(w, http.StatusCreated, parcel)
+	SuccessResponse(w, http.StatusCreated, message)
 }
