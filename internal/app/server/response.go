@@ -1,10 +1,9 @@
 package server
 
 import (
+	"CreateParcelApi/internal/app/model"
 	"github.com/unrolled/render"
 	"net/http"
-	"CreateParcelApi/internal/app/model"
-
 )
 
 const (
