@@ -9,12 +9,12 @@ import (
 
 func (s *server) createParcel(w http.ResponseWriter, r *http.Request) {
 	var data model.Parcel
-	SuccessResponse(w, http.StatusCreated, "test")
+
 	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
 		ErrUnprocessableEntityResponse(w, "Decode Error", err)
 		return
 	}
-	SuccessResponse(w, http.StatusCreated, data)
+
 	if err := data.ValidateParcelInput(); err != nil {
 		ErrInvalidEntityResponse(w, "Invalid Input", err)
 		return

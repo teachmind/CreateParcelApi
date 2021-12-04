@@ -38,10 +38,6 @@ func (p *Parcel) ValidateParcelInput() error {
 		return fmt.Errorf("user ID is required :%w", ErrEmpty)
 	}
 
-	if !p.SourceTime.IsZero() && p.SourceTime.Before(time.Now()) {
-		return fmt.Errorf("source time must be future date:%w", ErrEmpty)
-	}
-
 	return nil
 }
 
