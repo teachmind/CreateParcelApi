@@ -3,6 +3,8 @@ package server
 import (
 	"github.com/unrolled/render"
 	"net/http"
+	"CreateParcelApi/internal/app/model"
+
 )
 
 const (
@@ -35,4 +37,19 @@ func ErrNotFoundResponse(w http.ResponseWriter, title string, err error) {
 
 func ErrInternalServerResponse(w http.ResponseWriter, title string, err error) {
 	errorResponse(w, http.StatusInternalServerError, codeInternalServerErr, title, err)
+}
+
+func errorResponse(w http.ResponseWriter, httpStatusCode int, code string, title string, err error) {
+	renderer.JSON(w, httpStatusCode, model.GenericResponse{
+		Success: false,
+		Data:    nil,
+		Errors: []model.ErrorDetailsResponse{
+			{
+				Code:     code,
+				Message:  err.Error(),
+				Title:    title,
+				Severity: "error",
+			},
+		},
+	})
 }
