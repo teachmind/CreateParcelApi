@@ -20,27 +20,19 @@ func (s *server) createParcel(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	parcel := model.Parcel{
-		ID: 				data.ID,
-		UserID:             data.UserID,
-		CarrierID:      	data.CarrierID,
-		Status: 			data.Status,
-		SourceAddress:      data.SourceAddress,
-		DestinationAddress: data.DestinationAddress,
-		SourceTime:         data.SourceTime,
-		Price:              data.Price,
-		CarrierFee:         data.CarrierFee,
-		CompanyFee:         data.CompanyFee,
-		CreatedAt:          data.CreatedAt,
-		UpdatedAt:          data.UpdatedAt,
-	}
-
-	message, err := json.Marshal(&parcel)
+	message, err := json.Marshal(data)
 	if err != nil {
 		log.Error().Err(err).Msg("json marshal failed")
 		ErrUnprocessableEntityResponse(w, "bad request", err)
 		return
 	}
 
-	SuccessResponse(w, http.StatusCreated, message)
+	err = s.publisherService.Push(message)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to publish message")
+		ErrInternalServerResponse(w, "Failed to publish message", err)
+		return
+	}
+
+	SuccessResponse(w, http.StatusOK, "your parcel is being created withing some moments")
 }

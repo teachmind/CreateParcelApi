@@ -40,4 +40,3 @@ func (p *Parcel) ValidateParcelInput() error {
 
 	return nil
 }
-

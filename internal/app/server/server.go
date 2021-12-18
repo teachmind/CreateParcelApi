@@ -1,6 +1,7 @@
 package server
 
 import (
+	"CreateParcelApi/internal/app/service"
 	"context"
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
@@ -10,11 +11,13 @@ import (
 type server struct {
 	listenAddress        string
 	http                 *http.Server
+	publisherService 	 service.PublisherService
 }
 
-func NewServer(port string) *server {
+func NewServer(port string, publisherSvc service.PublisherService) *server {
 	s := &server{
 		listenAddress: port,
+		publisherService: publisherSvc,
 	}
 	s.http = &http.Server{
 		Addr: port,
@@ -33,6 +36,7 @@ func (s *server) route() *mux.Router {
 
 func (s *server) Run() error {
 	log.Info().Msgf("start listen server in %s", s.listenAddress)
+
 	if err := s.http.ListenAndServe(); err != nil {
 		if err != http.ErrServerClosed {
 			log.Error().Err(err).Msg("unexpected error while running server")
