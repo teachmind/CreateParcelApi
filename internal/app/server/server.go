@@ -31,6 +31,8 @@ func (s *server) route() *mux.Router {
 	//apiRoute := r.PathPrefix("/api/v1").Subrouter()
 	r.Methods(http.MethodGet).Path("/ping").HandlerFunc(s.pingHandler)
 	r.Methods(http.MethodPost).Path("/api/v1/parcel").HandlerFunc(s.createParcel)
+	r.Methods(http.MethodPost).Path("/api/v1/parcel/{id}/accept").HandlerFunc(s.parcelCarrierAccept)
+
 	return r
 }
 
