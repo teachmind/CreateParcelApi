@@ -21,6 +21,14 @@ type Parcel struct {
 	UpdatedAt          time.Time `json:"updated_at" db:"updated_at"`
 }
 
+type CarrierRequest struct {
+	ID        int `json:"id"`
+	ParcelID  int `json:"parcel_id" db:"parcel_id"`
+	CarrierID int `json:"carrier_id" db:"carrier_id"`
+	Status    int `json:"status" db:"status"`
+}
+
+
 func (p *Parcel) ValidateParcelInput() error {
 	if p.SourceAddress == "" {
 		return fmt.Errorf("source Address is required :%w", ErrEmpty)
@@ -38,5 +46,13 @@ func (p *Parcel) ValidateParcelInput() error {
 		return fmt.Errorf("user ID is required :%w", ErrEmpty)
 	}
 
+	return nil
+}
+
+// Validates carrier request input credentials
+func (cr *CarrierRequest) ValidateCarrierId() error {
+	if cr.CarrierID == 0 {
+		return fmt.Errorf("Carrier ID is required :%w", ErrEmpty)
+	}
 	return nil
 }
